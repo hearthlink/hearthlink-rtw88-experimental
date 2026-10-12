@@ -56,6 +56,8 @@ def main():
                         help="new output directory; default: build/VARIANT")
     parser.add_argument("--jobs", type=int, default=min(4, os.cpu_count() or 1))
     parser.add_argument("--prepare-only", action="store_true")
+    parser.add_argument("--manifest", type=Path,
+                        help="explicit reviewed source/release manifest; default: SOURCE.json")
     args = parser.parse_args()
     if args.jobs < 1:
         parser.error("--jobs must be positive")
@@ -67,7 +69,7 @@ def main():
         parser.error("output and source must be separate directories")
     if output.exists():
         parser.error("output exists; select a fresh --output directory")
-    manifest_content = (repo / "SOURCE.json").read_bytes()
+    manifest_content = (args.manifest or repo / "SOURCE.json").read_bytes()
     baseline = json.loads(manifest_content)
     inputs = checked_inputs(source, baseline)
     patches = []

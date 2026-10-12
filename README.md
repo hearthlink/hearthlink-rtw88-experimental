@@ -40,6 +40,18 @@ multi-client behavior, throughput, and fault injection remain unverified.
 USB reset accompanied the module switch, so this single test does not isolate
 the patches' contribution from the reset. See [docs/TESTING.md](docs/TESTING.md).
 
+## Reviewed build targets
+
+| Kernel release | Manifest | Build evidence | Hardware evidence |
+| --- | --- | --- | --- |
+| `7.2.8+deb14-amd64` | `SOURCE.json` (default) | Both variants built | Brief queue-only test described above |
+| `7.2.9+deb14-amd64` | `SOURCE-7.2.9.json` | Queue-only built with `W=1` and BTF | **Pending** |
+
+All 41 checked driver inputs in Debian source `7.2.9-1` match the historical
+baseline, so no patch rebase was needed. Both patch series apply with zero
+fuzz to that source; the combined variant has not been compiled for 7.2.9.
+See [docs/DEBIAN-7.2.9.md](docs/DEBIAN-7.2.9.md) for the new build target.
+
 ## Build
 
 Obtain matching Debian source and headers using authenticated Debian package
@@ -59,6 +71,20 @@ headers/`Module.symvers`; pahole when module BTF is enabled. With privately
 extracted headers, pass their directory through `--kdir` and provide their
 tools through `PATH`/`LD_LIBRARY_PATH`. `--prepare-only` skips compilation.
 Other source versions are rejected until reviewed and rebased.
+
+To select the reviewed 7.2.9 target explicitly:
+
+```sh
+python3 scripts/build.py \
+  --source /path/to/linux-source-7.2 \
+  --kdir /lib/modules/7.2.9+deb14-amd64/build \
+  --manifest SOURCE-7.2.9.json \
+  --variant queue-only
+```
+
+`--manifest` preserves input and kernel-release validation. A manifest is a
+reviewed local input, not an independent trust anchor: obtain authentic Debian
+packages and review a new target rather than changing hashes to silence errors.
 
 The helper installs and loads nothing. Read
 [docs/BUILD-AND-ROLLBACK.md](docs/BUILD-AND-ROLLBACK.md) before a temporary load.

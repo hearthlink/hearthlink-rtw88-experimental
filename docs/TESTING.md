@@ -78,6 +78,15 @@ metadata. The binary is not published here.
 
 ## Remaining tests
 
+On October 12, the queue-only variant built for Debian
+`7.2.9+deb14-amd64` using matching source `7.2.9-1`, GCC 16.2, `W=1`, and BTF.
+All 41 checked driver inputs retained the historical hashes. Both patch series
+applied with zero fuzz; the combined variant was not compiled for this target.
+Fifteen helper regression tests passed, including CLI manifest selection,
+default-target compatibility, and rejection of changed headers and wrong kernel
+releases. No new experimental module was loaded. See
+[DEBIAN-7.2.9.md](DEBIAN-7.2.9.md) for reproduction and Secure Boot notes.
+
 Patch 0003 was compiled and its lifetime paths reviewed, but **not loaded or
 hardware-tested**. Neither variant has timeout/disconnect fault-injection,
 long-duration stability, throughput, multi-client, or repeatable sleep/wake
