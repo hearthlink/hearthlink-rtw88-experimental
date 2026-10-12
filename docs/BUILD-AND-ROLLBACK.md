@@ -1,8 +1,9 @@
 # Build and temporary test
 
 Experimental module changes interrupt Wi-Fi and can crash the host. Use a local
-console or wired access, and save work. The build helper accepts only the
-baseline in `SOURCE.json`; another version needs review/rebasing.
+console or wired access, and save work. The build helper defaults to the
+baseline in `SOURCE.json`. Use `--manifest SOURCE-7.2.9.json` for the reviewed
+[7.2.9 build target](DEBIAN-7.2.9.md); another version needs review/rebasing.
 
 ## Source and headers
 
